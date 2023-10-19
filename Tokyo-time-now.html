@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Check foreign city time - Tokyo</title>
+		<style>
+			body {
+				font-family: Arial;
+				max-width: 800px;
+				margin: 0 auto;
+			}
+
+			h1 {
+				text-align: center;
+				color: #1a73e8;
+			}
+
+			#time,
+			#weather {
+				background-color: #f2f2f2;
+				padding: 20px;
+				border-radius: 4px;
+			}
+
+			#weather {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+
+			#weather img {
+				width: 100px;
+			}
+
+			#weather p {
+				margin: 10px;
+				font-size: 20px;
+			}
+
+			@media (max-width: 576px) {
+
+				#time,
+				#weather {
+					margin-bottom: 10px;
+				}
+			}
+
+			#time {
+				font-family: Arial;
+				font-size: 66px;
+				text-align: center;
+			}
+
+			#time>div {
+				display: inline-block;
+			}
+
+			#time .month {
+				color: #00897b;
+			}
+
+			#time .day {
+				color: #cddc39;
+			}
+
+			#time .time {
+				color: #3f51b5;
+			}
+
+			#view-other {
+				display: block;
+				margin: 20px auto;
+				width: 200px;
+				height: 40px;
+				border: none;
+				border-radius: 5px;
+				background-color: #2c89a0;
+				color: white;
+				font-size: 16px;
+				cursor: pointer;
+				text-align: center;
+				line-height: 40px;
+			}
+
+			#view-other:hover {
+				background-color: #1783b9;
+			}
+		</style>
+	</head>
+	<body>
+		<section id="main">
+			<h1>东京时间</h1>
+
+			<div id="time">
+				<div class="year"></div>
+				<div class="month"></div>
+				<div class="day"></div>
+				<div class="time"></div>
+			</div>
+
+<!-- 			<div id="weather">
+				<img id="weather-icon" src="">
+				<p>temperature:<span id="temp"></span>°F</p>
+				<p>Air quality:<span id="air"></span></p>
+			</div> -->
+
+		</section>
+
+		<a href="./index.html" id="view-other">view the other city</a>
+
+		<script>
+			// 获取城市时间
+			function updateTime() {
+				let time = new Date().toLocaleString("ja-JP", {
+					timeZone: "Asia/Tokyo"
+				});
+				let parts = time.split(/\D/);
+				let year = parts[0];
+				let month = parts[1];
+				let day = parts[2];
+				let timeString = parts[3] + ':' + parts[4] + ':' + parts[5];
+				document.querySelector('.year').textContent = year + '.';
+				document.querySelector('.month').textContent = month + '.';
+				document.querySelector('.day').textContent = day + '.';
+				document.querySelector('.time').textContent = timeString;
+
+			}
+			setInterval(updateTime, 1000);
+			// 时差计算
+			function calculateDiff() {
+				const tokyoOffset = 9; // 东京比UTC快9个小时
+				// ...计算时差代码
+			}
+			
+			
+			
+			
+			// 获取城市天气
+			function updateWeather() {
+			  // 使用天气API提供的接口
+			  let url = "https://yiketianqi.com/api?version=v5&appid=13191435&appsecret=&city=Tokyo";
+			  // 创建XMLHttpRequest对象
+			  let xhr = new XMLHttpRequest();
+			  // 设置请求方法和url
+			  xhr.open("GET", url);
+			  // 设置响应类型为json
+			  xhr.responseType = "json";
+			  // 发送请求
+			  xhr.send();
+			  // 监听响应状态变化
+			  xhr.onreadystatechange = function() {
+			    // 判断响应是否完成
+			    if (xhr.readyState === 4) {
+			      // 判断响应是否成功
+				  
+			      if (xhr.status === 200) {
+			        // 获取响应数据
+					console.log(2)
+			        let data = xhr.response;
+			        // 获取天气图标url
+			        let iconUrl = "https://www.tianqiapi.com/static/images/logo/" + data.wea_img + ".png";
+			        // 获取温度数据
+			        let temp = data.tem;
+			        // 获取空气质量数据
+			        let air = data.air_level;
+			        // 设置图片src属性
+			        document.getElementById("weather-icon").src = iconUrl;
+			        // 设置温度文本内容
+			        document.getElementById("temp").textContent = temp;
+			        // 设置空气质量文本内容
+			        document.getElementById("air").textContent = air;
+			      }
+			    }
+			  };
+			}
+			// 定时更新天气数据
+			// setInterval(updateWeather, 1000 * 60 * 10); // 每10分钟更新一次
+	
+		</script>
+
+	</body>
+</html>
